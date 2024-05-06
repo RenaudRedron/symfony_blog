@@ -1,11 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>Hello World !</h1>
-</body>
-</html>
+{% extends 'themes/base_visitor.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block description %}Bienvenue sur le blog de Jean Dupont{% endblock %}
+
+{% block keywords %}Blog, Articles, Jean, Dupont, Medecine{% endblock %}
+
+{% block main %}
+    <h1 class="text-center my-3 display-5">Hello</h1>
+{% endblock %}
