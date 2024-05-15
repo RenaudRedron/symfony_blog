@@ -34,9 +34,12 @@
             </div>
             <div class="col-lg-6 d-flex justify-content-center align-items-center">
                 <form method="post" class="w-100">
+
                     {% if error %}
                         <div class="alert alert-danger text-center">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
                     {% endif %}
+
+                    {% include "components/_alert.html.twig" %}
 
                     <h1 class="h3 mb-3 font-weight-normal">Connectez-vous</h1>
 
@@ -68,7 +71,7 @@
                     </div>
 
                     <div class="text-center mb-3">
-                        <a href="">Mot de passe oublié ?</a>
+                        <a href="{{path('visitor_authentication_forgot_password_request')}}">Mot de passe oublié ?</a>
                     </div>
 
                     <div class="text-center mb-3">

@@ -98,6 +98,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         match: true,
         message: "Le mot de passe doit contentir au moins une lettre miniscule, majuscule, un chiffre et un caractère spécial.",
     )]
+    #[Assert\NotCompromisedPassword(
+        message: "Mot de passe trop simple, veuillez en choisir un autre.")]
     private ?string $password = null;
 
     // ***********************
