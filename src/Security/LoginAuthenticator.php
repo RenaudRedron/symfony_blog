@@ -20,7 +20,7 @@ class LoginAuthenticator extends AbstractLoginFormAuthenticator
 {
     use TargetPathTrait;
 
-    public const LOGIN_ROUTE = 'app_login';
+    public const LOGIN_ROUTE = 'visitor_authentication_login';
 
     public function __construct(private UrlGeneratorInterface $urlGenerator)
     {
@@ -28,29 +28,32 @@ class LoginAuthenticator extends AbstractLoginFormAuthenticator
 
     public function authenticate(Request $request): Passport
     {
+        // 2- Récupération de l'email envoyé par l'utilisateur depuis le formulaire de connexion
         $email = $request->getPayload()->getString('email');
 
+        // 3- Sauvegarde de l'email en session 
         $request->getSession()->set(SecurityRequestAttributes::LAST_USERNAME, $email);
 
+        // 4- Vérification de la correspondance de l'email et du mot de passe de l'utilisateur provenant du formulaire à un utilisateur en BDD
         return new Passport(
-            new UserBadge($email),
-            new PasswordCredentials($request->getPayload()->getString('password')),
+            new UserBadge($email), // Vérification que l'email existe en BDD (ex: $user = "SELECT * FROM user WHERE email=:email")
+            new PasswordCredentials($request->getPayload()->getString('password')), // Vérification que le mot de passe soit correct (ex: password_verify())
             [
-                new CsrfTokenBadge('authenticate', $request->getPayload()->getString('_csrf_token')),
-                new RememberMeBadge(),
+                new CsrfTokenBadge('authenticate', $request->getPayload()->getString('_csrf_token')), // Vérification du token de controle contre les failles CSRF
+                new RememberMeBadge(), // Vérification si l'utilisateur souhaite qu'on ce souvienne de lui grace au COOKIE
             ]
         );
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
+        // 5- Si l'utilisateur n'existe pas en BDD, récupérer l'email précedemment envoyer depuis le formulaire et qui a été sauvegardé en session et ensuite effectuer la redirection vers la page de laquelle proviennent les informations.
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
         }
-
-        // For example:
-        // return new RedirectResponse($this->urlGenerator->generate('some_route'));
-        throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
+        
+        // 6- Dans le cas contraire, effectuer une redirection vers la page d'accueil
+        return new RedirectResponse($this->urlGenerator->generate('visitor_welcome_index'));
     }
 
     protected function getLoginUrl(Request $request): string
