@@ -1,0 +1,62 @@
+{% extends 'themes/base_admin.html.twig' %}
+
+{% block title %}Catégories{% endblock %}
+
+{% block description %}Liste des catégorie du tableau de bord{% endblock %}
+
+{% block keywords %}catégorie, admin{% endblock %}
+
+{% block main %}
+    <h1 class="text-center my-3 display-5">Liste des catégories</h1>
+
+    <div class="d-flex justify-content-end align-items-center my-3">
+        <a class="btn btn-primary shadow" href="{{path('admin_category_create')}}"><i class="fa-solid fa-folder-plus"></i> Nouvelle catégorie</a>
+    </div>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{message}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+
+
+
+    <div class="table-responsive">
+
+        <table class="table table-hover table-bordered table-striped mx-auto text-center">
+            <thead class="table-dark">
+                <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Nom</th>
+                        <th scope="col">Slug</th>
+                        <th scope="col">Créé le</th>
+                        <th scope="col">Modifier le</th>
+                        <th scope="col">Option</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for catagory in categories %}
+                    <tr>
+                        <td scope="row">{{catagory.id}}</td>
+                        <td>{{catagory.name}}</td>
+                        <td>{{catagory.slug}}</td>
+                        <td>{{catagory.createdAt|format_datetime()}}</td>
+                        <td>{{catagory.updatedAt|format_datetime()}}</td>
+                        <td>
+                            <div class="row justify-content-center">
+                                <a class="btn btn-sm btn-secondary mb-2 w-auto" href="#"><i class="fa-solid fa-pen-to-square"></i></a>
+                                <form class="w-auto" onclick="return confirm('Confirmer la suppression ?')" action="#" method="POST">
+                                    <input type="hidden" name="_csrf_token" value="{{csrf_token('delete_catagory_'~catagory.id)}}">
+                                    <button type="submit" class="btn btn-sm btn-danger"><i class="fa-solid fa-trash"></i></button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+
+{% endblock %}
