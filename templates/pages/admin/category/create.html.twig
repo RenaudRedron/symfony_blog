@@ -1,0 +1,32 @@
+{% extends 'themes/base_admin.html.twig' %}
+
+{% block title %}Nouvelle catégorie{% endblock %}
+
+{% block description %}Formulaire de création d'un catégorie du tableau de bord{% endblock %}
+
+{% block keywords %}ajouter, catégorie, admin{% endblock %}
+
+{% block main %}
+    <h1 class="text-center my-3 display-5">Nouvelle catégorie</h1>
+
+    <div class="container"> 
+        <div class="row">
+            <div class="col-md-4 mx-auto">
+
+                {{ form_start(form) }}
+                    <div class="mb-3">
+                        <label for="admin_category_form_name">Nom<strong class="text-danger">*</strong></label>
+                        <div class="text-danger">{{ form_errors(form.name) }}</div>
+                            {{ form_widget(form.name, {"attr": {"class":"form-control"}})}}
+                    </div>
+
+                    <div class="mb-3">
+                        <button formnovalidate class="btn btn-primary shadow w-100">Créer la catégorie</button>
+                    </div>
+                {{ form_end(form) }}
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
