@@ -1,13 +1,13 @@
 {% extends 'themes/base_admin.html.twig' %}
 
-{% block title %}Nouvelle catégorie{% endblock %}
+{% block title %}Modification catégorie : {{ category.name }} {% endblock %}
 
-{% block description %}Formulaire de création d'une catégorie du tableau de bord{% endblock %}
+{% block description %}Formulaire de modification d'une catégorie du tableau de bord{% endblock %}
 
-{% block keywords %}ajouter, catégorie, admin{% endblock %}
+{% block keywords %}modifier, catégorie, admin{% endblock %}
 
 {% block main %}
-    <h1 class="text-center my-3 display-5">Nouvelle catégorie</h1>
+    <h1 class="text-center my-3 display-5">Modification d'une catégorie</h1>
 
     <div class="container"> 
         <div class="row">
@@ -21,7 +21,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <button formnovalidate class="btn btn-primary shadow w-100">Créer la catégorie</button>
+                        <button formnovalidate class="btn btn-primary shadow w-100">Modifier la catégorie</button>
                     </div>
                 {{ form_end(form) }}
 
