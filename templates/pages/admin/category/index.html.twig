@@ -6,6 +6,26 @@
 
 {% block keywords %}catégorie, admin{% endblock %}
 
+{% block jQuery %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+{% endblock %}
+
+{% block dataTables %}
+    <link href="https://cdn.datatables.net/v/bs5/dt-2.0.7/datatables.min.css" rel="stylesheet">
+    <script src="https://cdn.datatables.net/v/bs5/dt-2.0.7/datatables.min.js"></script>
+    <script>
+
+        $(document).ready( function () {
+            $('#myTable').DataTable({   
+                language: {
+                    url: 'https://cdn.datatables.net/plug-ins/2.0.7/i18n/fr-FR.json',
+                },
+            });
+        } );
+
+    </script>
+{% endblock %}
+
 {% block main %}
     <h1 class="text-center my-3 display-5">Liste des catégories</h1>
 
@@ -13,18 +33,11 @@
         <a class="btn btn-primary shadow" href="{{path('admin_category_create')}}"><i class="fa-solid fa-folder-plus"></i> Nouvelle catégorie</a>
     </div>
 
-    {% for message in app.flashes('success') %}
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{message}}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    {% endfor %}
-
-
+    {% include "components/_alert.html.twig" %}
 
     <div class="table-responsive">
 
-        <table class="table table-hover table-bordered table-striped mx-auto text-center">
+        <table id="myTable" class="table table-hover table-bordered table-striped mx-auto text-center">
             <thead class="table-dark">
                 <tr>
                         <th scope="col">#</th>
@@ -32,25 +45,23 @@
                         <th scope="col">Slug</th>
                         <th scope="col">Créé le</th>
                         <th scope="col">Modifier le</th>
-                        <th scope="col">Option</th>
+                        <th scope="col">Options</th>
                 </tr>
             </thead>
             <tbody>
-                {% for catagory in categories %}
+                {% for category in categories %}
                     <tr>
-                        <td scope="row">{{catagory.id}}</td>
-                        <td>{{catagory.name}}</td>
-                        <td>{{catagory.slug}}</td>
-                        <td>{{catagory.createdAt|format_datetime()}}</td>
-                        <td>{{catagory.updatedAt|format_datetime()}}</td>
+                        <td scope="row">{{category.id}}</td>
+                        <td>{{category.name}}</td>
+                        <td>{{category.slug}}</td>
+                        <td>{{category.createdAt|format_datetime()}}</td>
+                        <td>{{category.updatedAt|format_datetime()}}</td>
                         <td>
-                            <div class="row justify-content-center">
-                                <a class="btn btn-sm btn-secondary mb-2 w-auto" href="#"><i class="fa-solid fa-pen-to-square"></i></a>
-                                <form class="w-auto" onclick="return confirm('Confirmer la suppression ?')" action="#" method="POST">
-                                    <input type="hidden" name="_csrf_token" value="{{csrf_token('delete_catagory_'~catagory.id)}}">
-                                    <button type="submit" class="btn btn-sm btn-danger"><i class="fa-solid fa-trash"></i></button>
-                                </form>
-                            </div>
+                            <a class="btn btn-sm btn-secondary m-1" href="{{path('admin_category_edit', {'id':category.id} )}}">Modifier</a>
+                            <form class="d-inline" action="{{path('admin_category_delete', {'id':category.id} )}}" method="post">
+                                <input type="hidden" name="_csrf_token" value="{{csrf_token('delete_category_'~category.id)}}">
+                                <input onclick="return confirm('Voulez-vous vraiment supprimer cette catégorie ?')" type="submit" class="btn btn-sm btn-danger" value="Supprimer">
+                            </form>
                         </td>
                     </tr>
                     {% endfor %}
