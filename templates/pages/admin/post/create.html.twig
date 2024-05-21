@@ -9,4 +9,53 @@
 {% block main %}
     <h1 class="text-center my-3 display-5">Nouvelle article</h1>
 
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-9 mx-auto">
+                {{ form_start(form) }}
+
+                <div class="mb-3">
+                    <label for="admin_post_form_title">Titre<strong class="text-danger">*</strong></label>
+                    <div class="text-danger">{{ form_errors(form.title) }}</div>
+                    {{ form_widget(form.title, {"attr": {"class":"form-control", "autofocus":"autofocus"}}) }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="admin_post_form_category">Catégorie<strong class="text-danger">*</strong></label>
+                    <div class="text-danger">{{ form_errors(form.category) }}</div>
+                    {{ form_widget(form.category, {"attr": {"class":"form-control"}}) }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="admin_post_form_imageFile_image">Image</label>
+                    <div class="text-danger">{{ form_errors(form.imageFile) }}</div>
+                    {{ form_widget(form.imageFile, {"attr": {"class":"form-control"}}) }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="admin_post_form_content">Contenu<strong class="text-danger">*</strong></label>
+                    <div class="text-danger">{{ form_errors(form.content) }}</div>
+                    {{ form_widget(form.content, {"id":"editor", "attr":{"class":"form-control", "rows":10}}) }}
+                </div>
+
+                <div class="mb-3">
+                    <input formnovalidate class="btn btn-primary shadow w-100" type="submit" value="Ajouter l'article">
+                </div>
+
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+
+{% block ckEditor %}
+    <script src="https://cdn.ckeditor.com/ckeditor5/41.4.2/classic/ckeditor.js"></script>
+    <script>
+        ClassicEditor
+            .create( document.querySelector( '#editor' ) )
+            .catch( error => {
+                console.error( error );
+            } );
+    </script>
+{% endblock %}
+
 {% endblock %}

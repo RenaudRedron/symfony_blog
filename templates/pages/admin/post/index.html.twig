@@ -6,11 +6,90 @@
 
 {% block keywords %}article, admin{% endblock %}
 
+{# {% block jQuery %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+{% endblock %}
+
+{% block dataTables %}
+    <link href="https://cdn.datatables.net/v/bs5/dt-2.0.7/datatables.min.css" rel="stylesheet">
+    <script src="https://cdn.datatables.net/v/bs5/dt-2.0.7/datatables.min.js"></script>
+    <script>
+
+        $(document).ready( function () {
+            $('#myTable').DataTable({   
+                language: {
+                    url: 'https://cdn.datatables.net/plug-ins/2.0.7/i18n/fr-FR.json',
+                },
+            });
+        } );
+
+    </script>
+{% endblock %} #}
+
 {% block main %}
     <h1 class="text-center my-3 display-5">Liste des articles</h1>
 
     <div class="d-flex justify-content-end align-items-center my-3">
         <a class="btn btn-primary shadow" href="{{path('admin_post_create')}}"><i class="fa-solid fa-folder-plus"></i> Nouvelle article</a>
+    </div>
+    
+    {% include "components/_alert.html.twig" %}
+
+    <div class="table-responsive">
+
+        <table id="myTable" class="table table-hover table-bordered table-striped mx-auto text-center">
+            <thead class="table-dark">
+                <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Image</th>
+                        <th scope="col">Titre</th>
+                        <th scope="col">Catégorie</th>
+                        <th scope="col">Contenu</th>
+                        <th scope="col">Publié?</th>
+                        <th scope="col">Créé le</th>
+                        <th scope="col">Modifier le</th>
+                        <th scope="col">Options</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for post in posts %}
+                    <tr>
+                        <td scope="row">{{post.id}}</td>
+                        <td>
+                        {% if post.image %}
+                            <img width="100" height="100" src="{{ vich_uploader_asset(post, 'imageFile') | imagine_filter('admin_post') }}" alt="{{ post.title }}">
+                        {% else %}
+                            <span>---</span>
+                        {% endif %}
+                        </td>
+                        <td>{{post.title}}</td>
+                        <td>{{post.category.name}}</td>
+                        <td><a class="btn btn-sm btn-dark" href="">Lire</a></td>
+                        <td class="d-flex flex-column justify-content-center align-items-center">
+                        
+                            {% if post.isPublished %}
+                                <span>Publié le {{post.publishedAt|format_datetime()}}</span>
+                            {% else %}
+                                <span>Pas encore</span>
+                            {% endif %}
+                            <div class="form-check form-switch">  
+                                <input class="form-check-input" type="checkbox" role="switch">
+                            </div>
+                        </td>
+                        <td>{{post.createdAt|format_datetime()}}</td>
+                        <td>{{post.updatedAt|format_datetime()}}</td>
+                        <td>
+                            <a class="btn btn-sm btn-secondary m-1" href="">Modifier</a>
+                            <form class="d-inline" action="" method="post">
+                                <input type="hidden" name="_csrf_token" value="{{csrf_token('delete_post_'~post.id)}}">
+                                <input onclick="return confirm('Voulez-vous vraiment supprimer cette catégorie ?')" type="submit" class="btn btn-sm btn-danger" value="Supprimer">
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+            </tbody>
+
+        </table>
     </div>
 
 {% endblock %}
