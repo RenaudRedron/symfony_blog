@@ -86,7 +86,7 @@ class Post
         message: "L'article doit obligatoirement possèdé un contenu."
     )]
     #[Assert\Length(
-        max: 1000,
+        max: 10000,
         maxMessage: 'Le contenu ne peu pas avoir plus de {{ limit }} caractères',
     )]
     #[ORM\Column(type: Types::TEXT)]
