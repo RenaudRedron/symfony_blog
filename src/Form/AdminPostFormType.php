@@ -27,7 +27,17 @@ class AdminPostFormType extends AbstractType
                 'expanded' => false,
                 'placeholder' => "Choisir une catégorie"
             ])
-            ->add('imageFile', VichImageType::class)
+            ->add('imageFile', VichImageType::class, [
+                'required' => false,
+                'allow_delete' => true,
+                'delete_label' => 'Supprimer l\'image existante ?',
+                'download_label' => false,
+                'download_uri' => false,
+                'image_uri' => false,
+                'imagine_pattern' => false,
+                // 'imagine_pattern' => "admin_post",      Il est possible d'utilisé liip imagine pour le pattern de l'image
+                'asset_helper' => false,
+            ])
             ->add('content', TextareaType::class)
         ;
     }

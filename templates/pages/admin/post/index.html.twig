@@ -6,7 +6,7 @@
 
 {% block keywords %}article, admin{% endblock %}
 
-{# {% block jQuery %}
+{% block jQuery %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 {% endblock %}
 
@@ -24,7 +24,7 @@
         } );
 
     </script>
-{% endblock %} #}
+{% endblock %}
 
 {% block main %}
     <h1 class="text-center my-3 display-5">Liste des articles</h1>
@@ -56,33 +56,39 @@
                     <tr>
                         <td scope="row">{{post.id}}</td>
                         <td>
-                        {% if post.image %}
-                            <img width="100" height="100" src="{{ vich_uploader_asset(post, 'imageFile') | imagine_filter('admin_post') }}" alt="{{ post.title }}">
-                        {% else %}
-                            <span>---</span>
-                        {% endif %}
+                        <div class="d-flex flex-column justify-content-center align-items-center">
+                            {% if post.image %}
+                                <img width="100" height="100" src="{{ vich_uploader_asset(post, 'imageFile') | imagine_filter('admin_post') }}" alt="{{ post.title }}">
+                            {% else %}
+                                <span>---</span>
+                            {% endif %}
+                        </div>
                         </td>
                         <td>{{post.title}}</td>
                         <td>{{post.category.name}}</td>
-                        <td><a class="btn btn-sm btn-dark" href="">Lire</a></td>
-                        <td class="d-flex flex-column justify-content-center align-items-center">
-                        
-                            {% if post.isPublished %}
-                                <span>Publié le {{post.publishedAt|format_datetime()}}</span>
-                            {% else %}
-                                <span>Pas encore</span>
-                            {% endif %}
-                            <div class="form-check form-switch">  
-                                <input class="form-check-input" type="checkbox" role="switch">
-                            </div>
+                        <td><a class="btn btn-sm btn-dark" href="{{path('admin_post_show', {'id':post.id})}}">Lire</a></td>
+                        <td>
+                            <div class="d-flex flex-column justify-content-center align-items-center">
+                                {% if post.isPublished %}
+                                    <span>Publié le {{post.publishedAt|format_datetime()}}</span>
+                                {% else %}
+                                    <span>Pas encore</span>
+                                {% endif %}
+                                <form action="{{path('admin_post_publish', {'id':post.id})}}" method="post">
+                                    <div class="form-check form-switch">  
+                                        <input type="hidden" name="_csrf_token" value="{{csrf_token('publish_post_'~post.id)}}">
+                                        <input onclick="return confirm('Voulez-vous vraiment faire cet action ?')" onchange="this.form.submit()" class="form-check-input" type="checkbox" role="switch" {{ post.isPublished ? "checked" : null }} >
+                                    </div>
+                                </form> {# Symfony: create, edit, delete, show #}
+                            </div>      {# Laravel: create-store, edit-update, delete, show #}
                         </td>
                         <td>{{post.createdAt|format_datetime()}}</td>
                         <td>{{post.updatedAt|format_datetime()}}</td>
                         <td>
-                            <a class="btn btn-sm btn-secondary m-1" href="">Modifier</a>
-                            <form class="d-inline" action="" method="post">
+                            <a class="btn btn-sm btn-secondary m-1" href="{{path('admin_post_edit', {id:post.id})}}">Modifier</a>
+                            <form class="d-inline" action="{{path('admin_post_delete', {id:post.id})}}" method="post">
                                 <input type="hidden" name="_csrf_token" value="{{csrf_token('delete_post_'~post.id)}}">
-                                <input onclick="return confirm('Voulez-vous vraiment supprimer cette catégorie ?')" type="submit" class="btn btn-sm btn-danger" value="Supprimer">
+                                <input onclick="return confirm('Voulez-vous vraiment supprimer cet article ?')" type="submit" class="btn btn-sm btn-danger" value="Supprimer">
                             </form>
                         </td>
                     </tr>

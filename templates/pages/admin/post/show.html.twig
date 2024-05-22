@@ -1,0 +1,30 @@
+{% extends 'themes/base_admin.html.twig' %}
+
+{% block title %}{{post.title}}{% endblock %}
+
+{% block description %}Détail d'un article du tableau de bord{% endblock %}
+
+{% block keywords %}détail, article, admin, show{% endblock %}
+
+{% block main %}
+    <div class="container">
+    
+    <div class="container my-3 text-center">
+        {% if post.image %}
+        <img class="img-fluid" src="{{ vich_uploader_asset(post, 'imageFile') }}" alt="{{ post.title }}">
+        {% endif %}
+    </div>
+
+    <div class="container">
+        <h1 class="text-center my-3 display-5">{{post.title}}</h1>
+
+        <div class="text-center">
+            Créer le {{post.createdAt|format_date()}} {{ post.isPublished ? "| Publié le " ~ post.publishedAt|format_date() : "| Non publié " }}
+        </div>
+
+        {# raw est un filtre qui permet l'interprete le html ce trouvant dans le post.content #}
+        <div class="container my-3">{{post.content|raw}}</div>
+
+    </div>
+    </div>
+{% endblock %}
