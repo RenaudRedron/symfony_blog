@@ -6,6 +6,22 @@
 
 {% block keywords %}modifier, article, admin{% endblock %}
 
+{% block jQuery %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+{% endblock %}
+
+{% block select2 %}
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <script>
+        // In your Javascript (external .js resource or <script> tag)
+        $(document).ready(function() {
+            $('#admin_post_form_tags').select2();
+        });
+    </script>
+{% endblock %}
+
 {% block main %}
     <h1 class="text-center my-3 display-5">Modification de l'article</h1>
 
@@ -24,6 +40,12 @@
                     <label for="admin_post_form_category">Catégorie<strong class="text-danger">*</strong></label>
                     <div class="text-danger">{{ form_errors(form.category) }}</div>
                     {{ form_widget(form.category, {"attr": {"class":"form-control"}}) }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="admin_post_form_tags">Tags</label>
+                    <div class="text-danger">{{ form_errors(form.tags) }}</div>
+                    {{ form_widget(form.tags, {"attr": {"class":"form-control"}}) }}
                 </div>
 
                 <div class="mb-3 row">

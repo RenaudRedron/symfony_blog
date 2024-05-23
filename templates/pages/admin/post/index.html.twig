@@ -72,7 +72,7 @@
                                 <span>---</span>
                             {% else %}
                                 {% for tag in post.tags %}
-                                {{tag.name}}
+                                    <span class="badge text-bg-secondary"> {{tag.name}}</span> 
                                 {% endfor %}
                             {% endif %}
                         </td>
